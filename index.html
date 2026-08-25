@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Domanda importante 👀</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ffd6e0, #fff1c9);
+    }
+
+    .card {
+      width: 90%;
+      max-width: 450px;
+      padding: 40px 25px;
+      text-align: center;
+      background: rgba(255,255,255,0.95);
+      border-radius: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    #question {
+      font-size: 20px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+
+    button {
+      border: none;
+      border-radius: 30px;
+      padding: 15px 25px;
+      margin: 8px;
+      font-size: 17px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #yes {
+      background: #ff6680;
+      color: white;
+      transition: transform 0.2s;
+    }
+
+    #yes:hover {
+      transform: scale(1.08);
+    }
+
+    #no {
+      background: #ddd;
+      color: #333;
+      position: relative;
+      transition: left 0.12s, top 0.12s;
+      touch-action: none;
+    }
+
+    #message {
+      display: none;
+      margin-top: 25px;
+      font-size: 21px;
+      font-weight: bold;
+      color: #ff6680;
+    }
+
+    #counter {
+      margin-top: 15px;
+      font-size: 13px;
+      color: #999;
+    }
+
+    #waLink {
+      display: none;
+      margin-top: 20px;
+      padding: 14px 22px;
+      border-radius: 30px;
+      background: #25D366;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <h1>Domanda importante 👀</h1>
+
+    <div id="question">
+      Ti va di fumare una sigaretta insieme? 🚬
+    </div>
+
+    <button id="yes">
+      Sì, volentieri 😏
+    </button>
+
+    <button id="no">
+      No 🙃
+    </button>
+
+    <div id="message">
+      Sapevo che avresti detto sì 😂🚬
+    </div>
+
+    <a id="waLink" href="#">Apri WhatsApp e invia 📲</a>
+
+    <div id="counter"></div>
+
+  </div>
+
+  <script>
+
+    // Il tuo numero WhatsApp
+    const mioNumero = "393483688570";
+
+    const yes = document.getElementById("yes");
+    const no = document.getElementById("no");
+    const message = document.getElementById("message");
+    const question = document.getElementById("question");
+    const counter = document.getElementById("counter");
+
+    let tentativi = 0;
+
+    function scappa() {
+
+      tentativi++;
+
+      const margine = 15;
+
+      const maxX =
+        window.innerWidth -
+        no.offsetWidth -
+        margine;
+
+      const maxY =
+        window.innerHeight -
+        no.offsetHeight -
+        margine;
+
+      const x =
+        margine +
+        Math.random() *
+        Math.max(1, maxX - margine);
+
+      const y =
+        margine +
+        Math.random() *
+        Math.max(1, maxY - margine);
+
+      no.style.position = "fixed";
+      no.style.left = x + "px";
+      no.style.top = y + "px";
+
+      if (tentativi === 3) {
+        question.innerHTML =
+          "Forse hai sbagliato 😂🚬";
+      }
+
+      if (tentativi === 5) {
+        no.innerHTML = "Ancora no? 🥺";
+      }
+
+      if (tentativi === 7) {
+        question.innerHTML =
+          "Ok, ho capito... vuoi solo fare la difficile 😏";
+      }
+
+      if (tentativi === 10) {
+        no.innerHTML = "NON CLICCARMI 😂";
+      }
+
+      counter.innerHTML =
+        "Tentativi di dire no: " + tentativi;
+    }
+
+    // Computer
+    no.addEventListener("mouseenter", scappa);
+
+    // Smartphone/tablet: pointerdown copre touch e penna in un unico evento,
+    // più affidabile di touchstart sui browser mobili
+    no.addEventListener(
+      "pointerdown",
+      function(e) {
+        e.preventDefault();
+        scappa();
+      },
+      { passive: false }
+    );
+
+    // Se riesce comunque a cliccare
+    no.addEventListener("click", function(e) {
+      e.preventDefault();
+      scappa();
+    });
+
+    // Pulsante SÌ
+    yes.addEventListener("click", function() {
+
+      message.style.display = "block";
+      no.style.display = "none";
+
+      question.innerHTML =
+        "Perfetto 😏 Quando ci facciamo questa sigaretta? 🚬";
+
+      counter.innerHTML = "";
+
+      const testo = "Sì, ci sto 😏🚬";
+
+      const link =
+        "https://wa.me/" +
+        mioNumero +
+        "?text=" +
+        encodeURIComponent(testo);
+
+      // il link di riserva resta sempre visibile: nei browser "in-app"
+      // (es. link aperto dentro WhatsApp/Instagram) il redirect automatico
+      // può essere bloccato, quindi si può aprire WhatsApp toccandolo a mano
+      const waLink = document.getElementById("waLink");
+      waLink.href = link;
+      waLink.style.display = "inline-block";
+
+      // cliccare un <a> reale è più affidabile di window.location.href per far
+      // riconoscere ai browser mobili l'apertura dell'app WhatsApp (deep link),
+      // e va fatto SUBITO nello stesso gesto di click, senza setTimeout
+      waLink.click();
+    });
+
+  </script>
+
+</body>
+</html>
