@@ -226,6 +226,9 @@
 
   <script>
 
+    // Il tuo numero WhatsApp
+    const mioNumero = "393483688570";
+
     // Le canzoni della playlist
     const canzoni = [
       { id: "mh4AQkw4Jjc", titolo: "🎵 Canzone 1" },
@@ -257,39 +260,42 @@
       playlist.appendChild(btn);
     });
 
-    // URL del Cloudflare Worker che scrive le proposte nel repo (da compilare dopo il deploy)
-    const WORKER_URL = "https://sigaretta-canzoni.TUO-SUBDOMAIN.workers.dev";
-
+    // Invia la proposta di canzone via WhatsApp, come per il pulsante "Sì"
     const songForm = document.getElementById("songForm");
     const songFormMsg = document.getElementById("songFormMsg");
 
     songForm.addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const nome = document.getElementById("songNome").value;
-      const canzone = document.getElementById("songCanzone").value;
+      const nome = document.getElementById("songNome").value.trim();
+      const canzone = document.getElementById("songCanzone").value.trim();
 
-      songFormMsg.textContent = "Invio in corso...";
+      if (!canzone) {
+        return;
+      }
 
-      fetch(WORKER_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome: nome, canzone: canzone })
-      })
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-          songFormMsg.textContent = data.ok
-            ? "Grazie! Proposta salvata 🎉"
-            : "Errore: " + data.error;
-          if (data.ok) songForm.reset();
-        })
-        .catch(function() {
-          songFormMsg.textContent = "Errore di rete, riprova.";
-        });
+      const testo =
+        "🎶 Proposta canzone" +
+        (nome ? " da " + nome : "") +
+        ": " + canzone;
+
+      const link =
+        "https://wa.me/" +
+        mioNumero +
+        "?text=" +
+        encodeURIComponent(testo);
+
+      songFormMsg.textContent = "Apro WhatsApp...";
+
+      const a = document.createElement("a");
+      a.href = link;
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      songForm.reset();
     });
-
-    // Il tuo numero WhatsApp
-    const mioNumero = "393483688570";
 
     const yes = document.getElementById("yes");
     const no = document.getElementById("no");
