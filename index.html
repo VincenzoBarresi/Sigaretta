@@ -125,6 +125,29 @@
       height: 100%;
       border: 0;
     }
+
+    .playlist {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .song {
+      border: none;
+      border-radius: 20px;
+      padding: 10px 16px;
+      font-size: 14px;
+      background: #f1f1f1;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .song.active {
+      background: #ff6680;
+      color: white;
+    }
   </style>
 </head>
 
@@ -156,6 +179,7 @@
 
     <div class="video-wrap">
       <iframe
+        id="player"
         src="https://www.youtube.com/embed/mh4AQkw4Jjc?autoplay=1"
         title="YouTube video player"
         allow="autoplay; encrypted-media; picture-in-picture"
@@ -163,9 +187,42 @@
       </iframe>
     </div>
 
+    <div class="playlist" id="playlist"></div>
+
   </div>
 
   <script>
+
+    // Le canzoni della playlist
+    const canzoni = [
+      { id: "mh4AQkw4Jjc", titolo: "🎵 Canzone 1" },
+      { id: "Gd7uoXj9PFI", titolo: "🎵 Canzone 2" },
+      { id: "bJtRONVWC08", titolo: "🎵 Canzone 3" }
+    ];
+
+    const player = document.getElementById("player");
+    const playlist = document.getElementById("playlist");
+
+    function suonaCanzone(index) {
+      player.src =
+        "https://www.youtube.com/embed/" +
+        canzoni[index].id +
+        "?autoplay=1";
+
+      playlist.querySelectorAll(".song").forEach(function(btn, i) {
+        btn.classList.toggle("active", i === index);
+      });
+    }
+
+    canzoni.forEach(function(canzone, index) {
+      const btn = document.createElement("button");
+      btn.className = "song" + (index === 0 ? " active" : "");
+      btn.textContent = canzone.titolo;
+      btn.addEventListener("click", function() {
+        suonaCanzone(index);
+      });
+      playlist.appendChild(btn);
+    });
 
     // Il tuo numero WhatsApp
     const mioNumero = "393483688570";
