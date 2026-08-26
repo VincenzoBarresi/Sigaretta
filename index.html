@@ -148,6 +148,31 @@
       background: #ff6680;
       color: white;
     }
+
+    .song-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 25px;
+    }
+
+    .song-form input {
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      padding: 10px 16px;
+      font-size: 14px;
+    }
+
+    .song-form button {
+      background: #ff6680;
+      color: white;
+    }
+
+    #songFormMsg {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #777;
+    }
   </style>
 </head>
 
@@ -176,6 +201,14 @@
     <a id="waLink" href="#">Apri WhatsApp e invia 📲</a>
 
     <div id="counter"></div>
+
+    <form id="songForm" class="song-form">
+      <input type="text" id="songNome" placeholder="Il tuo nome (opzionale)" maxlength="50">
+      <input type="text" id="songCanzone" placeholder="Titolo o link della tua canzone preferita" maxlength="200" required>
+      <button type="submit">Proponi una canzone 🎶</button>
+    </form>
+
+    <div id="songFormMsg"></div>
 
     <div class="video-wrap">
       <iframe
@@ -222,6 +255,37 @@
         suonaCanzone(index);
       });
       playlist.appendChild(btn);
+    });
+
+    // URL del Cloudflare Worker che scrive le proposte nel repo (da compilare dopo il deploy)
+    const WORKER_URL = "https://sigaretta-canzoni.TUO-SUBDOMAIN.workers.dev";
+
+    const songForm = document.getElementById("songForm");
+    const songFormMsg = document.getElementById("songFormMsg");
+
+    songForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const nome = document.getElementById("songNome").value;
+      const canzone = document.getElementById("songCanzone").value;
+
+      songFormMsg.textContent = "Invio in corso...";
+
+      fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome: nome, canzone: canzone })
+      })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          songFormMsg.textContent = data.ok
+            ? "Grazie! Proposta salvata 🎉"
+            : "Errore: " + data.error;
+          if (data.ok) songForm.reset();
+        })
+        .catch(function() {
+          songFormMsg.textContent = "Errore di rete, riprova.";
+        });
     });
 
     // Il tuo numero WhatsApp
