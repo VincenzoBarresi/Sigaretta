@@ -25,7 +25,8 @@
       overflow-y: auto;
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
+      padding: 30px 0;
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #ffd6e0, #fff1c9);
     }
@@ -203,7 +204,6 @@
     <div id="counter"></div>
 
     <form id="songForm" class="song-form">
-      <input type="text" id="songNome" placeholder="Il tuo nome (opzionale)" maxlength="50">
       <input type="text" id="songCanzone" placeholder="Titolo o link della tua canzone preferita" maxlength="200" required>
       <button type="submit">Proponi una canzone 🎶</button>
     </form>
@@ -267,7 +267,6 @@
     songForm.addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const nome = document.getElementById("songNome").value.trim();
       const canzone = document.getElementById("songCanzone").value.trim();
 
       if (!canzone) {
@@ -275,9 +274,7 @@
       }
 
       const testo =
-        "🎶 Queste sono le mie canzoni preferite" +
-        (nome ? " (" + nome + ")" : "") +
-        ": " + canzone;
+        "🎶 Queste sono le mie canzoni preferite: " + canzone;
 
       const link =
         "https://wa.me/" +
