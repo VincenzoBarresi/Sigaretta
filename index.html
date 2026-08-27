@@ -191,6 +191,13 @@
     #visitCounter:hover {
       opacity: 1;
     }
+
+    .quote {
+      margin-top: 20px;
+      font-size: 14px;
+      font-style: italic;
+      color: #999;
+    }
   </style>
 </head>
 
@@ -239,6 +246,8 @@
 
     <div class="playlist" id="playlist"></div>
 
+    <div class="quote">Ma perché, tu non ti vuoi, azzurra e lucente?</div>
+
   </div>
 
   <div id="visitCounter"></div>
@@ -246,7 +255,7 @@
   <script>
 
     // Contatore visite silenzioso (nessun account, nessun dato personale salvato)
-    fetch("https://abacus.jasoncameron.dev/hit/sigaretta-vbarresi/visite")
+    fetch("https://abacus.jasoncameron.dev/hit/sigaretta-vbarresi/visite-v2")
       .then(function(res) { return res.json(); })
       .then(function(data) {
         document.getElementById("visitCounter").textContent = "👀 " + data.value;
