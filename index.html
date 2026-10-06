@@ -246,7 +246,7 @@
     <div class="video-wrap">
       <iframe
         id="player"
-        src="https://www.youtube.com/embed/mh4AQkw4Jjc?autoplay=1"
+        src=""
         title="YouTube video player"
         allow="autoplay; encrypted-media; picture-in-picture"
         allowfullscreen>
@@ -304,6 +304,9 @@
       });
       playlist.appendChild(btn);
     });
+
+    // carica la prima canzone della playlist invece di un id fisso nell'HTML, così resta sempre allineata all'array
+    player.src = "https://www.youtube.com/embed/" + canzoni[0].id + "?autoplay=1";
 
     // Invia la proposta di canzone via WhatsApp, come per il pulsante "Sì"
     const songForm = document.getElementById("songForm");
