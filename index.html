@@ -19,6 +19,10 @@
       box-sizing: border-box;
     }
 
+    html, body {
+      height: 100%;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
@@ -28,7 +32,9 @@
       align-items: flex-start;
       padding: 30px 0;
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #ffd6e0, #fff1c9);
+      background:
+        linear-gradient(135deg, rgba(255,214,224,0.5), rgba(255,241,201,0.5)),
+        url("WhatsApp Image 2026-10-06 at 11.21.07.jpeg") center center / cover no-repeat;
     }
 
     .card {
@@ -36,9 +42,12 @@
       max-width: 450px;
       padding: 40px 25px;
       text-align: center;
-      background: rgba(255,255,255,0.95);
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       border-radius: 25px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
     }
 
     h1 {
@@ -255,7 +264,7 @@
   <script>
 
     // Contatore visite silenzioso (nessun account, nessun dato personale salvato)
-    fetch("https://abacus.jasoncameron.dev/hit/sigaretta-vbarresi/visite-v2")
+    fetch("https://abacus.jasoncameron.dev/hit/sigaretta-vbarresi/visite-v3")
       .then(function(res) { return res.json(); })
       .then(function(data) {
         document.getElementById("visitCounter").textContent = "👀 " + data.value;
